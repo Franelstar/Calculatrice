@@ -246,17 +246,24 @@ public class Calculatrice extends JFrame {
 	  }  
 	  
 	  class ClavierListener implements KeyListener{
-		  
-		    public void keyPressed(KeyEvent event) {
-		      System.out.println("Code touche pressée : " + event.getKeyCode() + " - caractère touche pressée : " + event.getKeyChar());
+		  public void keyReleased(KeyEvent event) {
+		    if(!isNumeric(event.getKeyChar()))
+		      ecran.setText(ecran.getText().replace(String.valueOf(event.getKeyChar()), ""));      	
 		    }
 
-		    public void keyReleased(KeyEvent event) {
-		      System.out.println("Code touche relâchée : " + event.getKeyCode() + " - caractère touche relâchée : " + event.getKeyChar());         
-		    }
+		    //Inutile de redéfinir ces méthodes, ous n'en avons plus l'utilité !
+		    public void keyPressed(KeyEvent event) {}
+		    public void keyTyped(KeyEvent event) {}
 
-		    public void keyTyped(KeyEvent event) {
-		      System.out.println("Code touche tapée : " + event.getKeyCode() + " - caractère touche tapée : " + event.getKeyChar());
-		    }   	
-		  } 
+		    //Retourne true si le paramètre est numérique, false dans le cas contraire
+		    private boolean isNumeric(char carac){
+		    try {
+		      Integer.parseInt(String.valueOf(carac));
+		    }
+		    catch (NumberFormatException e) {
+		      return false;            
+		    }
+		    return true;
+		  }
+		}
 }
