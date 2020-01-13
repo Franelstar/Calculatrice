@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 /**
  * @author Franck Anael MBIAYA
@@ -21,7 +23,7 @@ public class Calculatrice extends JFrame {
 	 
 	// création des différents boutons
 	JButton[] tab_button = new JButton[tab_string.length];
-	private JLabel ecran = new JLabel();
+	private JTextField ecran = new JTextField();
 	private Dimension dim = new Dimension(50, 40);
 	private Dimension dim2 = new Dimension(50, 29);
 	private double chiffre1;
@@ -48,21 +50,22 @@ public class Calculatrice extends JFrame {
 	
 	private void initComposant() {
 		//On définit la police d'écriture à utiliser
-	    Font police = new Font("Arial", Font.BOLD, 20);
+	    Font police = new Font("Arial", Font.BOLD, 22);
 	    
-	    ecran = new JLabel("0");
+	    ecran = new JTextField("0");
 	    
 	    ecran.setFont(police);
 	    
 	    //On aligne les informations à droite dans le JLabel
 	    ecran.setHorizontalAlignment(JLabel.RIGHT);
-	    ecran.setPreferredSize(new Dimension(220, 20));
+	    ecran.setPreferredSize(new Dimension(220, 35));
+	    ecran.addKeyListener(new ClavierListener());
 	    JPanel operateur = new JPanel();      
 	    operateur.setPreferredSize(new Dimension(55, 225));
 	    JPanel chiffre = new JPanel();
 	    chiffre.setPreferredSize(new Dimension(165, 225));
 	    JPanel panEcran = new JPanel();
-	    panEcran.setPreferredSize(new Dimension(220, 30));
+	    panEcran.setPreferredSize(new Dimension(220, 35));
 
 	    //On parcourt le tableau initialisé
 	    //afin de créer nos boutons
@@ -111,7 +114,7 @@ public class Calculatrice extends JFrame {
 	      }
 	    }
 	    panEcran.add(ecran);
-	    panEcran.setBorder(BorderFactory.createLineBorder(Color.black));
+	    //panEcran.setBorder(BorderFactory.createLineBorder(Color.black));
 	    container.add(panEcran, BorderLayout.NORTH);
 	    container.add(chiffre, BorderLayout.CENTER);
 	    container.add(operateur, BorderLayout.EAST);
@@ -240,5 +243,20 @@ public class Calculatrice extends JFrame {
 			  operateur = "";
 			  ecran.setText("");
 		  }
-	  }      
+	  }  
+	  
+	  class ClavierListener implements KeyListener{
+		  
+		    public void keyPressed(KeyEvent event) {
+		      System.out.println("Code touche pressée : " + event.getKeyCode() + " - caractère touche pressée : " + event.getKeyChar());
+		    }
+
+		    public void keyReleased(KeyEvent event) {
+		      System.out.println("Code touche relâchée : " + event.getKeyCode() + " - caractère touche relâchée : " + event.getKeyChar());         
+		    }
+
+		    public void keyTyped(KeyEvent event) {
+		      System.out.println("Code touche tapée : " + event.getKeyCode() + " - caractère touche tapée : " + event.getKeyChar());
+		    }   	
+		  } 
 }
