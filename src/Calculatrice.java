@@ -5,6 +5,8 @@
 import javax.swing.*;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * @author Franck Anael MBIAYA
@@ -72,31 +74,31 @@ public class Calculatrice extends JFrame {
 	        //et qui n'est pas un chiffre
 	        //on définit le comportement à avoir grâce à un listener
 	        case 11 :
-	         // tab_button[i].addActionListener(new EgalListener());
+	          tab_button[i].addActionListener(new EgalListener());
 	          chiffre.add(tab_button[i]);
 	          break;
 	        case 12 :
 	          tab_button[i].setForeground(Color.red);
-	         // tab_button[i].addActionListener(new ResetListener());
+	          tab_button[i].addActionListener(new ResetListener());
 	          operateur.add(tab_button[i]);
 	          break;
 	        case 13 :
-	        //  tab_button[i].addActionListener(new PlusListener());
+	          tab_button[i].addActionListener(new PlusListener());
 	          tab_button[i].setPreferredSize(dim2);
 	          operateur.add(tab_button[i]);
 	          break;
 	        case 14 :
-	         // tab_button[i].addActionListener(new MoinsListener());
+	          tab_button[i].addActionListener(new MoinsListener());
 	          tab_button[i].setPreferredSize(dim2);
 	          operateur.add(tab_button[i]);
 	          break;	
 	        case 15 :	
-	        // tab_button[i].addActionListener(new MultiListener());
+	         tab_button[i].addActionListener(new MultiListener());
 	          tab_button[i].setPreferredSize(dim2);
 	          operateur.add(tab_button[i]);
 	          break;
 	        case 16 :
-	         // tab_button[i].addActionListener(new DivListener());
+	          tab_button[i].addActionListener(new DivListener());
 	          tab_button[i].setPreferredSize(dim2);
 	          operateur.add(tab_button[i]);
 	          break;
@@ -104,7 +106,7 @@ public class Calculatrice extends JFrame {
 	          //Par défaut, ce sont les premiers éléments du tableau
 	          //donc des chiffres, on affecte alors le bon listener
 	          chiffre.add(tab_button[i]);
-	        //  tab_button[i].addActionListener(new ChiffreListener());
+	          tab_button[i].addActionListener(new ChiffreListener());
 	          break;
 	      }
 	    }
@@ -114,5 +116,129 @@ public class Calculatrice extends JFrame {
 	    container.add(chiffre, BorderLayout.CENTER);
 	    container.add(operateur, BorderLayout.EAST);
 	}
+	
+	//Méthode permettant d'effectuer un calcul selon l'opérateur sélectionné
+	 private void calcul(){
+		 if(operateur.equals("+")){
+			 chiffre1 = chiffre1 + Double.valueOf(ecran.getText()).doubleValue();
+			 ecran.setText(String.valueOf(chiffre1));
+		 }
+		 if(operateur.equals("-")){
+			 chiffre1 = chiffre1 - Double.valueOf(ecran.getText()).doubleValue();
+			 ecran.setText(String.valueOf(chiffre1));
+		 }          
+		 if(operateur.equals("*")){
+			 chiffre1 = chiffre1 * Double.valueOf(ecran.getText()).doubleValue();
+			 ecran.setText(String.valueOf(chiffre1));
+		 }     
+		 if(operateur.equals("/")){
+			 try{
+				 chiffre1 = chiffre1 / Double.valueOf(ecran.getText()).doubleValue();
+				 ecran.setText(String.valueOf(chiffre1));
+			 } catch(ArithmeticException e) {
+				 ecran.setText("0");
+			 }
+		 }
+	  }
 
+	  //Listener utilisé pour les chiffres
+	  //Permet de stocker les chiffres et de les afficher
+	  class ChiffreListener implements ActionListener {
+		  public void actionPerformed(ActionEvent e){
+	      //On affiche le chiffre additionnel dans le label
+			  String str = ((JButton)e.getSource()).getText();
+			  if(update){
+				  update = false;
+			  }
+			  else{
+				  if(!ecran.getText().equals("0"))
+					  str = ecran.getText() + str;
+			  }
+			  ecran.setText(str);
+		  }
+	  }
+
+	  //Listener affecté au bouton =
+	  class EgalListener implements ActionListener {
+		  public void actionPerformed(ActionEvent arg0){
+			  calcul();
+			  update = true;
+			  clicOperateur = false;
+		  }
+	  }
+
+	  //Listener affecté au bouton +
+	  class PlusListener implements ActionListener {
+		  public void actionPerformed(ActionEvent arg0){
+			  if(clicOperateur){
+				  calcul();
+				  ecran.setText(String.valueOf(chiffre1));
+			  }
+			  else{
+				  chiffre1 = Double.valueOf(ecran.getText()).doubleValue();
+				  clicOperateur = true;
+			  }
+			  operateur = "+";
+			  update = true;
+		  }
+	  }
+
+	  //Listener affecté au bouton -
+	  class MoinsListener implements ActionListener {
+		  public void actionPerformed(ActionEvent arg0){
+			  if(clicOperateur){
+				  calcul();
+				  ecran.setText(String.valueOf(chiffre1));
+			  }
+			  else{
+				  chiffre1 = Double.valueOf(ecran.getText()).doubleValue();
+				  clicOperateur = true;
+			  }
+			  operateur = "-";
+			  update = true;
+		  }
+	  }
+
+	  //Listener affecté au bouton *
+	  class MultiListener implements ActionListener {
+		  public void actionPerformed(ActionEvent arg0){
+			  if(clicOperateur){
+				  calcul();
+				  ecran.setText(String.valueOf(chiffre1));
+			  }
+			  else{
+				  chiffre1 = Double.valueOf(ecran.getText()).doubleValue();
+				  clicOperateur = true;
+			  }
+			  operateur = "*";
+			  update = true;
+		  }
+	  }
+
+	  //Listener affecté au bouton /
+	  class DivListener implements ActionListener {
+		  public void actionPerformed(ActionEvent arg0){
+			  if(clicOperateur){
+				  calcul();
+				  ecran.setText(String.valueOf(chiffre1));
+			  }
+			  else{
+				  chiffre1 = Double.valueOf(ecran.getText()).doubleValue();
+				  clicOperateur = true;
+			  }
+			  operateur = "/";
+			  update = true;
+		  }
+	  }
+
+	  //Listener affecté au bouton de remise à zéro
+	  class ResetListener implements ActionListener {
+		  public void actionPerformed(ActionEvent arg0){
+			  clicOperateur = false;
+			  update = true;
+			  chiffre1 = 0;
+			  operateur = "";
+			  ecran.setText("");
+		  }
+	  }      
 }
