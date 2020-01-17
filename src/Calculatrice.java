@@ -44,6 +44,7 @@ public class Calculatrice extends JFrame {
 		  
 		//On ajoute le conteneur
 	    this.setContentPane(container);
+	    ecran.requestFocusInWindow();
 		
 		this.setVisible(true);
 	}
@@ -52,7 +53,7 @@ public class Calculatrice extends JFrame {
 		//On définit la police d'écriture à utiliser
 	    Font police = new Font("Arial", Font.BOLD, 22);
 	    
-	    ecran = new JTextField("0");
+	    ecran = new JTextField("");
 	    
 	    ecran.setFont(police);
 	    
@@ -154,10 +155,11 @@ public class Calculatrice extends JFrame {
 				  update = false;
 			  }
 			  else{
-				  if(!ecran.getText().equals("0"))
+				  if(!ecran.getText().equals(""))
 					  str = ecran.getText() + str;
 			  }
 			  ecran.setText(str);
+			  ecran.requestFocusInWindow();
 		  }
 	  }
 
@@ -167,6 +169,7 @@ public class Calculatrice extends JFrame {
 			  calcul();
 			  update = true;
 			  clicOperateur = false;
+			  ecran.requestFocusInWindow();
 		  }
 	  }
 
@@ -183,6 +186,7 @@ public class Calculatrice extends JFrame {
 			  }
 			  operateur = "+";
 			  update = true;
+			  ecran.requestFocusInWindow();
 		  }
 	  }
 
@@ -199,6 +203,7 @@ public class Calculatrice extends JFrame {
 			  }
 			  operateur = "-";
 			  update = true;
+			  ecran.requestFocusInWindow();
 		  }
 	  }
 
@@ -215,6 +220,7 @@ public class Calculatrice extends JFrame {
 			  }
 			  operateur = "*";
 			  update = true;
+			  ecran.requestFocusInWindow();
 		  }
 	  }
 
@@ -228,9 +234,12 @@ public class Calculatrice extends JFrame {
 			  else{
 				  chiffre1 = Double.valueOf(ecran.getText()).doubleValue();
 				  clicOperateur = true;
+				  JOptionPane jop2 = new JOptionPane();
+				    JOptionPane.showMessageDialog(null, "Message préventif", "Attention", JOptionPane.WARNING_MESSAGE);      
 			  }
 			  operateur = "/";
 			  update = true;
+			  ecran.requestFocusInWindow();
 		  }
 	  }
 
@@ -242,14 +251,28 @@ public class Calculatrice extends JFrame {
 			  chiffre1 = 0;
 			  operateur = "";
 			  ecran.setText("");
+			  ecran.requestFocusInWindow();
 		  }
 	  }  
 	  
 	  class ClavierListener implements KeyListener{
 		  public void keyReleased(KeyEvent event) {
-		    if(!isNumeric(event.getKeyChar()))
-		      ecran.setText(ecran.getText().replace(String.valueOf(event.getKeyChar()), ""));      	
+			  if(update){
+				  update = false;
+				  ecran.setText("");
+			  }
+		    if(!isNumeric(event.getKeyChar())) {		    
+			    String str = ecran.getText().replace(String.valueOf(event.getKeyChar()), "");
+				  if(update){
+					  update = false;
+				  }
+				  else{
+					  if(!ecran.getText().equals(""))
+						  str = ecran.getText() + str;
+				  }
+				  ecran.requestFocusInWindow();
 		    }
+		   }
 
 		    //Inutile de redéfinir ces méthodes, ous n'en avons plus l'utilité !
 		    public void keyPressed(KeyEvent event) {}
